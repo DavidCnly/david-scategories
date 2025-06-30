@@ -44,9 +44,6 @@ if 'selected_letter' not in st.session_state:
 if 'timer_duration' not in st.session_state:
     st.session_state.timer_duration = 30  # default timer seconds
 
-if 'timer_started' not in st.session_state:
-    st.session_state.timer_started = False
-
 def shuffle_animation(all_options, display_spot, number, duration=1, speed=0.05):
     start_time = time.time()
     while time.time() - start_time < duration:
@@ -86,12 +83,11 @@ def run_timer(duration):
         timer_placeholder.markdown(f"### ⏳ Time Remaining: {mins}:{secs:02d}")
         time.sleep(1)
     timer_placeholder.markdown("### 🛎️ Time's up!")
-    st.session_state.timer_started = False  # Reset after timer ends
 
 # UI
 st.title("Stop the Bus ✋🚌")
 
-st.radio("⏱️ Choose Timer Duration:", [30, 45, 60], horizontal=True, key="timer_duration")
+st.radio("⏱️ Choose Timer Duration:", [30, 60], horizontal=True, key="timer_duration")
 
 if st.button("Let's Play!"):
     select_new_categories()
@@ -99,19 +95,14 @@ if st.button("Let's Play!"):
     placeholder = st.empty()
     letter = letter_animation(all_letters, placeholder)
     st.session_state.selected_letter = letter
-    st.session_state.timer_started = False  # Reset timer start on new play
 
 if st.session_state.selected_categories:
-    st.subheader("Go!")
+    st.subheader("Your Categories:")
     for cat in st.session_state.selected_categories:
         st.write(f"- {cat}")
-    st.write(f'Letter: **{st.session_state.selected_letter}')
 
 if st.session_state.selected_letter:
     st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
 
-    if not st.session_state.timer_started:
-        if st.button("🕒 Start Timer"):
-            st.session_state.timer_started = True
-    if st.session_state.timer_started:
+    if st.button("🕒 Start Timer"):
         run_timer(st.session_state.timer_duration)
