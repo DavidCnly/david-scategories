@@ -123,4 +123,5 @@ if st.session_state.selected_letter:
             for cat in st.session_state.selected_categories:
                st.write(f"### - {cat}")
     if st.session_state.timer_started:
+        st.divider()
         run_timer(st.session_state.timer_duration)
