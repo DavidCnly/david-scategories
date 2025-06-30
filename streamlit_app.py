@@ -90,6 +90,7 @@ if st.session_state.selected_categories:
     #st.subheader("Your Categories:")
     #for cat in st.session_state.selected_categories:
      #   st.write(f"- {cat}")
+     pass
 
 if st.session_state.selected_letter:
     st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
