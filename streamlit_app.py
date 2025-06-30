@@ -119,5 +119,8 @@ if st.session_state.selected_letter:
     if not st.session_state.timer_started:
         if st.button("🕒 Start Timer"):
             st.session_state.timer_started = True
+            for cat in st.session_state.selected_categories:
+               st.write(f"# - {cat}")
+            st.write(f'# {st.session_state.selected_letter}')
     if st.session_state.timer_started:
         run_timer(st.session_state.timer_duration)
