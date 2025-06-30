@@ -31,18 +31,23 @@ num_emojis = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️�
 
 all_letters = list(string.ascii_uppercase)
 
+# Persistent storage across reruns
 if 'recently_used' not in st.session_state:
     st.session_state.recently_used = deque(maxlen=20)
+
 if 'selected_categories' not in st.session_state:
     st.session_state.selected_categories = []
+
 if 'selected_letter' not in st.session_state:
     st.session_state.selected_letter = None
+
 if 'timer_duration' not in st.session_state:
-    st.session_state.timer_duration = 30
+    st.session_state.timer_duration = 30  # default timer seconds
+
 if 'timer_started' not in st.session_state:
     st.session_state.timer_started = False
-if 'timer_end_time' not in st.session_state:
-    st.session_state.timer_end_time = None
+
+
 
 def shuffle_animation(all_options, display_spot, number, duration=1, speed=0.05):
     start_time = time.time()
@@ -54,14 +59,18 @@ def shuffle_animation(all_options, display_spot, number, duration=1, speed=0.05)
 
 def select_new_categories(num=5):
     available = list(set(all_categories) - set(st.session_state.recently_used))
+    
     final_selections = []
     st.markdown("## 🔁 Picking categories...")
+
     for i in range(num):
+        #with st.spinner(f"Selecting category {i+1}..."):
         placeholder = st.empty()
         picked = shuffle_animation(available, placeholder, number=i)
         final_selections.append(picked)
         st.session_state.recently_used.append(picked)
         available.remove(picked)
+
     st.session_state.selected_categories = final_selections
 
 def letter_animation(all_options, display_spot, duration=1, speed=0.05):
@@ -72,10 +81,20 @@ def letter_animation(all_options, display_spot, duration=1, speed=0.05):
         time.sleep(speed)
     return choice
 
+def run_timer(duration):
+    timer_placeholder = st.empty()
+    for remaining in range(duration, 0, -1):
+        mins, secs = divmod(remaining, 60)
+        timer_placeholder.markdown(f"### ⏳ Time Remaining: {mins}:{secs:02d}")
+        time.sleep(1)
+    timer_placeholder.markdown("### 🛎️ Time's up!")
+    st.session_state.timer_started = False  # Reset after timer ends
+
 # UI
 st.title("Stop the Bus ✋🚌")
-
 st.radio("⏱️ Choose Timer Duration:", [30, 45, 60], horizontal=True, key="timer_duration")
+
+
 
 if st.button("Let's Play!"):
     select_new_categories()
@@ -83,29 +102,21 @@ if st.button("Let's Play!"):
     placeholder = st.empty()
     letter = letter_animation(all_letters, placeholder)
     st.session_state.selected_letter = letter
-    st.session_state.timer_started = False
-    st.session_state.timer_end_time = None
+    st.session_state.timer_started = False  # Reset timer start on new play
 
 if st.session_state.selected_categories:
-    st.subheader("Your Categories:")
-    for cat in st.session_state.selected_categories:
-        st.write(f"- {cat}")
+    #st.divider()
+    #for cat in st.session_state.selected_categories:
+     #   st.write(f"### - {cat}")
+     pass
 
 if st.session_state.selected_letter:
-    st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
+    #st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
+    #st.divider()
+
 
     if not st.session_state.timer_started:
         if st.button("🕒 Start Timer"):
             st.session_state.timer_started = True
-            st.session_state.timer_end_time = time.time() + st.session_state.timer_duration
-
     if st.session_state.timer_started:
-        time_left = int(st.session_state.timer_end_time - time.time())
-        if time_left > 0:
-            mins, secs = divmod(time_left, 60)
-            st.markdown(f"### ⏳ Time Remaining: {mins}:{secs:02d}")
-            st.experimental_rerun()  # rerun every second to update timer
-        else:
-            st.markdown("### 🛎️ Time's up!")
-            st.session_state.timer_started = False
-            st.session_state.timer_end_time = None
+        run_timer(st.session_state.timer_duration)
