@@ -85,7 +85,8 @@ def run_timer(duration):
     timer_placeholder = st.empty()
     for remaining in range(duration, 0, -1):
         mins, secs = divmod(remaining, 60)
-        timer_placeholder.markdown(f"### ⏳ Time Remaining: {mins}:{secs:02d}")
+        st.markdown("   ")
+        timer_placeholder.markdown(f"### ⏳ Time Remaining: {mins}:{secs:02d} ⏳")
         time.sleep(1)
     timer_placeholder.markdown("### 🛎️ Time's up!")
     st.session_state.timer_started = False  # Reset after timer ends
@@ -123,5 +124,4 @@ if st.session_state.selected_letter:
             for cat in st.session_state.selected_categories:
                st.write(f"### - {cat}")
     if st.session_state.timer_started:
-        st.divider()
         run_timer(st.session_state.timer_duration)
