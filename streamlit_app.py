@@ -87,9 +87,9 @@ if st.button("Let's Play!"):
     st.session_state.timer_end_time = None
 
 if st.session_state.selected_categories:
-    st.subheader("Your Categories:")
-    for cat in st.session_state.selected_categories:
-        st.write(f"- {cat}")
+    #st.subheader("Your Categories:")
+    #for cat in st.session_state.selected_categories:
+     #   st.write(f"- {cat}")
 
 if st.session_state.selected_letter:
     st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")

@@ -111,8 +111,9 @@ if st.session_state.selected_categories:
      pass
 
 if st.session_state.selected_letter:
-    #st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
-    #st.divider()
+    #st.markdown(f"### 🔤 Letter: 
+    # **{st.session_state.selected_letter}**")
+    st.divider()
 
 
     if not st.session_state.timer_started:
