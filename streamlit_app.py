@@ -102,10 +102,10 @@ if st.button("Let's Play!"):
     st.session_state.timer_started = False  # Reset timer start on new play
 
 if st.session_state.selected_categories:
+    st.divider()
     st.subheader("Go!")
     for cat in st.session_state.selected_categories:
         st.write(f"- {cat}")
-    st.write(f'Letter: **{st.session_state.selected_letter}')
 
 if st.session_state.selected_letter:
     st.markdown(f"### 🔤 Letter: **{st.session_state.selected_letter}**")
